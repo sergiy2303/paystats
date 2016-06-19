@@ -18,6 +18,7 @@ gem 'decent_exposure'
 gem 'kaminari'
 gem 'bootstrap-kaminari-views'
 gem 'devise'
+gem 'slim'
 
 group :development, :test do
   gem 'pry'
