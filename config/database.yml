@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  host: localhost
+
+development:
+  <<: *default
+  database: paystats_dev
+
+test: &test
+  <<: *default
+  database: paystats_test
+
+cucumber:
+  <<: *test
