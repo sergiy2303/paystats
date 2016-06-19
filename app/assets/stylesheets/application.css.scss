@@ -13,3 +13,26 @@
  *= require_tree .
  *= require_self
  */
+
+#sign-in-section {
+  max-width: 380px;
+  margin: 0 auto;
+  background-color: #fff;
+  margin-top: 50px;
+
+  #new_user {
+    padding: 15px 30px 15px 30px;
+  }
+  input {
+    font-size: 1.2em;
+  }
+  .actions {
+    text-align: center;
+  }
+  label {
+    font-weight: bold;
+  }
+  .alert-section {
+    margin-top: 10px;
+  }
+}

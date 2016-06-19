@@ -1,12 +1,17 @@
-= form_for resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-signin' }, remote: true do |f|
-    h2.form-signin-heading Please login
-    = f.email_field :email, autofocus: true, class: 'form-control', placeholder: 'Email', data: { disable: true }
-    = f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password', data: { disable: true }
-    - if devise_mapping.rememberable?
-      = f.check_box :remember_me
-      |  
-      = f.label :remember_me
-    .actions
-      = f.submit "Log in", class: 'btn btn-lg btn-primary btn-block', data: { disable: true }
-    br
-    = render "devise/shared/links"
+= form_for new_user, as: :user, url: session_path(:user), html: { class: 'w3-container form-signin' }, remote: true do |f|
+  = f.label :email, class: 'w3-label w3-text-blue'
+  = f.email_field :email, autofocus: true, class: 'w3-border w3-input', required: true, autocomplete: "true", placeholder: 'Your email'
+  = f.label :password, class:'w3-label w3-text-blue'
+  = f.password_field :password, autocomplete: "true", class: 'w3-border w3-input', required: true, placeholder: 'Password'
+  - flash.each do |key, message|
+   .w3-container.w3-red.alert-section
+      span.w3-closebtn onclick="this.parentElement.style.display='none'"  &times;
+      p= message
+  - if devise_mapping.rememberable?
+    = f.check_box :remember_me, class: 'w3-check'
+    |  
+    = f.label :remember_me, class:'w3-label w3-text-blue'
+  .actions
+    = f.submit "Log in", class: 'w3-btn w3-blue', data: { disable: true }
+  br
+  = render "devise/shared/links"
