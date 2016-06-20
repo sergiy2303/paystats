@@ -1,1 +1,13 @@
 h1 Hello!!!
+= link_to 'New payment', new_payment_path, remote: true
+#new-payment-form
+
+- payments.each do |payment|
+  = payment.amount
+  br
+  = payment.date
+  br
+  = payment.category&.name
+  br
+  = link_to 'Delete payment', payment_path(payment), method: :delete, remote: true
+  = link_to 'Edit payment', edit_payment_path(payment), remote: true

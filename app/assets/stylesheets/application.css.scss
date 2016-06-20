@@ -36,3 +36,14 @@
     margin-top: 10px;
   }
 }
+
+.navbar-section {
+  ul {
+    display: flex;
+    justify-content: space-between;
+
+    li.w3-dropdown-hover {
+      background-color: transparent;
+    }
+  }
+}

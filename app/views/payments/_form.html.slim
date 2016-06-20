@@ -1,0 +1,5 @@
+= simple_form_for payment, remote: true do |f|
+  = f.input :amount
+  = f.input :date
+  = f.association :category
+  = f.button :submit, class: 'w3-btn', data: { disable: true }

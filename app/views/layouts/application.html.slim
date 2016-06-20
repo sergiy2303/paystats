@@ -8,5 +8,6 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   body
-    = render 'shared/navbar'
+    .navbar-section
+      = render 'shared/navbar'
     = yield

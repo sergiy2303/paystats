@@ -1,13 +1,33 @@
 class PaymentsController < ApplicationController
-  expose(:payment)
-  expose(:payments)
+  expose(:payment, attributes: :payment_params)
+  expose(:payments) { current_user.payments }
 
   def index
   end
 
-  def new
+  def create
+    payment.user_id = current_user.id
+    if payment.save
+      redirect_via_turbolinks_to payments_path
+    end
   end
 
-  def edit
+  def update
+    if payment.save
+      redirect_via_turbolinks_to payments_path
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    payment.destroy
+    redirect_via_turbolinks_to payments_path
+  end
+
+  private
+
+  def payment_params
+    params.require(:payment).permit(:amount, :date, :category_id)
   end
 end

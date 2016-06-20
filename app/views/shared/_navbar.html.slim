@@ -1,11 +1,17 @@
 ul.w3-navbar.w3-card-2.w3-light-grey
-  li
-    a href="#"  Home
-  li
-    a href="#"  Link 1
-  li.w3-dropdown-hover
-    a href="#"  Dropdown
-    .w3-dropdown-content.w3-white.w3-card-4
-      a href="#"  Link 1
-      a href="#"  Link 2
-      a href="#"  Link 3
+  .left-section
+    li
+      =link_to 'Home', root_path
+
+  - if user_signed_in?
+    .right-section
+      li.w3-hover-blue.w3-dropdown-hover
+        a.w3-hover-blue href="#" 
+          | Account 
+          i.fa.fa-caret-down
+        .w3-dropdown-content.w3-white.w3-card-4
+          a href="#"  Link 1
+          a href="#"  Link 2
+          a href="#"  Link 3
+      li
+        =link_to 'Sign Out', destroy_user_session_path, method: :delete, remote: true
