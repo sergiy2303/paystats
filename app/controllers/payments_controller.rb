@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
   expose(:payment, attributes: :payment_params)
-  expose(:payments) { current_user.payments }
+  expose(:payments) { current_user.payments.order(date: :desc) }
 
   def index
   end

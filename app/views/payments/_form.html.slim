@@ -3,8 +3,8 @@
     span.w3-closebtn onclick="closeForm()"  &times;
     .form-inputs
       - form_params
-      = f.input :amount, input_html: { class: 'w3-input w3-border' }
+      = f.input :amount, input_html: { class: 'w3-input w3-border', autofocus: true, min: 0.01 }
       = f.input :date, as: :date, html5: true, input_html: { class: 'w3-input w3-border' }.merge!(form_params[:date])
       = f.association :category, { input_html: { class: 'w3-select w3-border'} }.merge!(form_params[:category])
     .create-payment-button
-      = f.button :submit, class: 'w3-btn', data: { disable: true }
+      = f.button :submit, class: 'w3-btn w3-blue', data: { disable: true }

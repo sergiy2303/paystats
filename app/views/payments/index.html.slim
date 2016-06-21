@@ -1,17 +1,19 @@
 #payments-section
   .w3-row
-    .w3-col.m6
+    .w3-col.m8
       .new-payment
         .payment-link
-          = link_to 'New payment', new_payment_path, remote: true, class: 'w3-btn new'
+          = link_to 'New payment', new_payment_path, remote: true, class: 'w3-btn new w3-green'
         #new-payment-form
-
-      - payments.each do |payment|
-        = payment.amount
-        br
-        = payment.date
-        br
-        = payment.category&.name
-        br
-        = link_to 'Delete payment', payment_path(payment), method: :delete, remote: true
-        = link_to 'Edit payment', edit_payment_path(payment), remote: true
+      .payments
+        - payments.each do |payment|
+          .w3-card-4
+            header.w3-container.w3-blue
+              =link_to payment_path(payment), method: :delete, remote: true
+                span.w3-closebtn alt='Delete payment' &times;
+              h3= payment&.category&.name&.capitalize
+            .w3-container
+              p= "Amount: $#{payment.amount}"
+              p= "Date: #{payment.date}"
+            footer.w3-container
+              = link_to 'Edit', edit_payment_path(payment), remote: true, class: 'w3-btn w3-orange'
