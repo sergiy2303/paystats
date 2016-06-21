@@ -7,7 +7,7 @@
         #new-payment-form
       .payments
         - payments.each do |payment|
-          .w3-card-4
+          .w3-card-2
             header.w3-container.w3-blue
               =link_to payment_path(payment), method: :delete, remote: true
                 span.w3-closebtn alt='Delete payment' &times;
