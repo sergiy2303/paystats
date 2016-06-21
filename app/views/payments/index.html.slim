@@ -1,13 +1,17 @@
-h1 Hello!!!
-= link_to 'New payment', new_payment_path, remote: true
-#new-payment-form
+#payments-section
+  .w3-row
+    .w3-col.m6
+      .new-payment
+        .payment-link
+          = link_to 'New payment', new_payment_path, remote: true, class: 'w3-btn new'
+        #new-payment-form
 
-- payments.each do |payment|
-  = payment.amount
-  br
-  = payment.date
-  br
-  = payment.category&.name
-  br
-  = link_to 'Delete payment', payment_path(payment), method: :delete, remote: true
-  = link_to 'Edit payment', edit_payment_path(payment), remote: true
+      - payments.each do |payment|
+        = payment.amount
+        br
+        = payment.date
+        br
+        = payment.category&.name
+        br
+        = link_to 'Delete payment', payment_path(payment), method: :delete, remote: true
+        = link_to 'Edit payment', edit_payment_path(payment), remote: true

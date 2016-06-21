@@ -14,3 +14,9 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+
+function closeForm() {
+  $('#new-payment-form').html('');
+  $('.payment-link a').show();
+}

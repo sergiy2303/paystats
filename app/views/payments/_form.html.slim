@@ -1,5 +1,9 @@
 = simple_form_for payment, remote: true do |f|
-  = f.input :amount
-  = f.input :date
-  = f.association :category
-  = f.button :submit, class: 'w3-btn', data: { disable: true }
+  .w3-card-4
+    span.w3-closebtn onclick="closeForm()"  &times;
+    .form-inputs
+      = f.input :amount, input_html: { class: 'w3-input w3-border' }
+      = f.input :date, as: :date, html5: true, input_html: { class: 'w3-input w3-border', value: Date.today }
+      = f.association :category, input_html: { class: 'w3-select w3-border' }
+    .create-payment-button
+      = f.button :submit, class: 'w3-btn', data: { disable: true }
