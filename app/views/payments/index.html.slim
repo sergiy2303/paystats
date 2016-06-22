@@ -1,24 +1,24 @@
 #payments-section
-  .w3-row
-    .w3-col.m8
-      .new-payment
-        .payment-link
-          = link_to 'New payment', new_payment_path, remote: true, class: 'w3-btn new w3-green'
-        #new-payment-form
-        .payments
-          table.w3-table.w3-bordered
-            thead
-              tr.w3-blue
-                th Amount
-                th Date
-                th Category
-                th Action
-            tbody
-              - payments.each do |payment|
-                tr
-                  td= payment.amount
-                  td= payment.date
-                  td= payment&.category&.name&.capitalize
-                  td
-                    = link_to 'Edit', edit_payment_path(payment), remote: true, class: 'w3-btn w3-orange'
-                    = link_to 'Delete', payment_path(payment), method: :delete, remote: true, class: 'w3-btn'
+  .new-payment
+    .payment-link
+      = link_to 'New payment', new_payment_path, remote: true, class: 'w3-btn new w3-green'
+    #new-payment-form
+    .payments
+      table.w3-table.w3-bordered
+        thead
+          tr.w3-blue
+            th №
+            th Amount
+            th Date
+            th Category
+            th Action
+        tbody
+          - payments.each_with_index do |payment, i|
+            tr
+              td= i
+              td= payment.amount
+              td= payment.date
+              td= payment&.category&.name&.capitalize
+              td
+                = link_to 'Edit', edit_payment_path(payment), remote: true, class: 'w3-btn w3-orange'
+                = link_to 'Delete', payment_path(payment), method: :delete, remote: true, class: 'w3-btn'
