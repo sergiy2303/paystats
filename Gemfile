@@ -19,6 +19,7 @@ gem 'kaminari'
 gem 'bootstrap-kaminari-views'
 gem 'devise'
 gem 'slim'
+gem 'remotipart', '~> 1.2'
 
 group :development, :test do
   gem 'pry'

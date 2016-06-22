@@ -4,4 +4,5 @@ class Payment < ActiveRecord::Base
 
   validates :amount, presence: true
   validates_numericality_of :amount, greater_than_or_equal_to: 0.01
+  mount_uploader :image, ImageUploader
 end

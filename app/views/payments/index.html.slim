@@ -5,15 +5,20 @@
         .payment-link
           = link_to 'New payment', new_payment_path, remote: true, class: 'w3-btn new w3-green'
         #new-payment-form
-      .payments
-        - payments.each do |payment|
-          .w3-card-2
-            header.w3-container.w3-blue
-              =link_to payment_path(payment), method: :delete, remote: true
-                span.w3-closebtn alt='Delete payment' &times;
-              h3= payment&.category&.name&.capitalize
-            .w3-container
-              p= "Amount: $#{payment.amount}"
-              p= "Date: #{payment.date}"
-            footer.w3-container
-              = link_to 'Edit', edit_payment_path(payment), remote: true, class: 'w3-btn w3-orange'
+        .payments
+          table.w3-table.w3-bordered
+            thead
+              tr.w3-blue
+                th Amount
+                th Date
+                th Category
+                th Action
+            tbody
+              - payments.each do |payment|
+                tr
+                  td= payment.amount
+                  td= payment.date
+                  td= payment&.category&.name&.capitalize
+                  td
+                    = link_to 'Edit', edit_payment_path(payment), remote: true, class: 'w3-btn w3-orange'
+                    = link_to 'Delete payment', payment_path(payment), method: :delete, remote: true, class: 'w3-btn'

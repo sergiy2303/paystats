@@ -1,4 +1,5 @@
 class PaymentsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: :create
   expose(:payment, attributes: :payment_params)
   expose(:payments) { current_user.payments.order(date: :desc) }
 
@@ -28,6 +29,6 @@ class PaymentsController < ApplicationController
   private
 
   def payment_params
-    params.require(:payment).permit(:amount, :date, :category_id)
+    params.require(:payment).permit(:amount, :date, :category_id, :image)
   end
 end
