@@ -6,6 +6,6 @@
       = f.input :amount, input_html: { class: 'w3-input w3-border', autofocus: true, min: 0.01 }
       = f.input :date, as: :date, html5: true, input_html: { class: 'w3-input w3-border' }.merge!(form_params[:date])
       = f.association :category, { input_html: { class: 'w3-select w3-border'} }.merge!(form_params[:category])
-      = f.input :image, as: :file, input_html: { class: 'file', accept: '.png, .jpg' }
+      = f.input :image, as: :file, input_html: { class: 'w3-input', accept: '.png, .jpg' }
     .create-payment-button
       = f.button :submit, class: 'w3-btn w3-blue', data: { disable: true }
