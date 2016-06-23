@@ -1,0 +1,11 @@
+= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), remote: true) do |f|
+  = f.hidden_field :default_category_id, value: common_default_category.id
+  .form-inputs
+    = f.input :email, required: true, autofocus: true, input_html: { class: 'w3-border w3-input'}
+    = f.input :first_name, required: true, input_html: { class: 'w3-border w3-input'}
+    = f.input :last_name, required: true, input_html: { class: 'w3-border w3-input'}
+    = f.input :password, required: true, input_html: { class: 'w3-border w3-input'}
+    = f.input :password_confirmation, required: true, input_html: { class: 'w3-border w3-input'}
+  .form-actions
+    = f.button :submit, "Sign up", class: 'w3-btn w3-blue'
+    = link_to 'Sign in', new_user_session_path, class: 'w3-btn w3-light-grey'

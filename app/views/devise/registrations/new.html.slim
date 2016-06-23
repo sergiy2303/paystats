@@ -5,12 +5,4 @@
         .w3-container.w3-blue
           h2 Sign up
         #sign-up-form
-          = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-            = f.error_notification
-            .form-inputs
-              = f.input :email, required: true, autofocus: true, input_html: { class: 'w3-border w3-input'}
-              = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length), input_html: { class: 'w3-border w3-input'}
-              = f.input :password_confirmation, required: true, input_html: { class: 'w3-border w3-input'}
-            .form-actions
-              = f.button :submit, "Sign up", class: 'w3-btn w3-blue'
-              = link_to 'Sign in', new_user_session_path, class: 'w3-btn w3-gray'
+         = render 'form'

@@ -112,3 +112,13 @@
     }
   }
 }
+
+span.error {
+  color: red;
+  text-transform: capitalize;
+}
+
+span.error ~ input {
+  color: red;
+  background-color: red;
+}
