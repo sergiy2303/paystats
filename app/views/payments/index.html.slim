@@ -16,7 +16,7 @@
           - payments.each_with_index do |payment, i|
             tr
               td= i
-              td= payment.amount
+              td= number_to_currency(payment.amount)
               td= payment.date
               td= payment&.category&.name&.capitalize
               td
