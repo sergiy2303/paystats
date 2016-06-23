@@ -39,3 +39,10 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
+
+Cloudinary.config do |config|
+  config.cloud_name = Rails.configuration.cloudinary["cloud_name"]
+  config.api_key = Rails.configuration.cloudinary["api_key"]
+  config.api_secret = Rails.configuration.cloudinary["api_secret"]
+  config.cdn_subdomain = true
+end
