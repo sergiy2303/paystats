@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   resources :payments
   root 'payments#index'
   resources :stats, only: :index
+  resources :settings, only: :index
+  resources :categories
 end

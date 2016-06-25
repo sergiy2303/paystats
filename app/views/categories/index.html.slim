@@ -1,0 +1,19 @@
+h1 Your categories
+.link-new
+  = link_to 'New category', new_category_path, remote: true, class: 'w3-btn new w3-green'
+#new-category-form
+
+table.w3-table.w3-bordered.w3-striped.w3-border.w3-hoverable.w3-card-4
+  thead
+    tr.w3-blue
+      th №
+      th Name
+      th Actions
+  tbody
+    - current_user.categories.each_with_index do |category, i|
+      tr.w3-hover-blue
+        td= i
+        td= category.name
+        td
+          = link_to 'Edit', edit_category_path(category), class: 'w3-btn w3-orange', remote: true
+          = link_to 'Destroy', category_path(category), method: :delete, class: 'w3-btn w3-red', remote: true

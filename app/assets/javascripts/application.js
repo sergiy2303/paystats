@@ -18,6 +18,6 @@
 
 
 function closeForm() {
-  $('#new-payment-form').html('');
-  $('.payment-link a').show();
+  $('span.w3-closebtn').closest('form').remove();
+  $('.link-new a').show();
 }

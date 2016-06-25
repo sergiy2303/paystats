@@ -5,11 +5,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :payments
+  has_many :categories
 
   validates_numericality_of :default_category_id, greater_than_or_equal_to: 1, only_integer: true
   validates :first_name, :last_name, presence: true
 
   def default_category
     Category.default_category_for(self)
+  end
+
+  def all_categories
+    Category.all_categories_for(self)
   end
 end

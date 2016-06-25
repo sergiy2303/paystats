@@ -1,0 +1,7 @@
+= simple_form_for category, remote: true do |f|
+  .w3-card-4
+    span.w3-closebtn onclick="closeForm()"  &times;
+    .form-inputs
+      = f.input :name, input_html: { class: 'w3-input w3-border', autofocus: true, min: 0.01 }
+    .create-payment-button
+      = f.button :submit, class: 'w3-btn w3-blue', data: { disable: true }
