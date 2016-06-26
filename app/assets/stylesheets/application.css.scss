@@ -48,23 +48,22 @@
   }
 }
 
+.link-new {
+  text-align: center;
+}
+
+.create-button {
+  text-align: center;
+  margin-top: 10px;
+}
 .w3-row {
   display: flex;
   justify-content: center;
 }
 #payments-section {
   margin-top: 15px;
-  .new-payment {
-    .link-new {
-      text-align: center;
-    }
-  }
   #new-payment-form {
     margin-top: 15px;
-    .create-payment-button {
-      text-align: center;
-      margin-top: 10px;
-    }
     input[type="number"], input[type="date"], select {
       height: 40px;
       box-shadow: 0 0 3px rgba(0,0,0,0.3);
@@ -89,6 +88,9 @@
       padding: 15px;
       margin: 10px 10px 20px 10px;
     }
+  }
+  .payments {
+    margin-bottom: 15px;
   }
 }
 
@@ -121,4 +123,9 @@ span.error {
 span.error ~ input {
   color: red;
   background-color: red;
+}
+
+li.page.current {
+  padding: 8px 16px;
+  float: left;
 }
