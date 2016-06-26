@@ -1,1 +1,9 @@
 h3 Here will be settings
+#settings-section
+  .w3-row
+    .w3-col.m4
+      = form_tag set_default_category_settings_path, remote: true do
+        = label_tag 'Default category', nil ,class: 'w3-label w3-text-teal'
+        = select_tag :default_category_id, options_from_collection_for_select(current_user.all_categories, :id ,:name,current_user.default_category.id), class: 'w3-select'
+        .submit-button
+          = submit_tag :save, class: 'w3-btn w3-blue', data: { disable: true }

@@ -129,3 +129,14 @@ li.page.current {
   padding: 8px 16px;
   float: left;
 }
+
+#image-modal {
+  display: block;
+  img {
+    width: 100%;
+  }
+  .w3-modal-content {
+    width: inherit;
+    background-color: transparent;
+  }
+}

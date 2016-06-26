@@ -1,0 +1,16 @@
+.w3-row
+  .w3-col.m4
+    .w3-card-4
+      header.w3-container.w3-blue
+        h3=title_last
+      .w3-container.context
+        p.amount= number_to_currency(value_last)
+  .w3-col.m4
+    .w3-card-4
+      header.w3-container.w3-blue
+        h3= title_actual
+      .w3-container.context
+        span.amount= number_to_currency(value_actual)
+        - percent = value_actual - value_last
+        span class="#{percent > 0 ? 'w3-text-red' : 'w3-text-green'}"
+          = number_to_percentage(percent, precision: 2)

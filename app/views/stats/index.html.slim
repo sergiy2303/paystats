@@ -1,18 +1,5 @@
 h3 Hello!
-h3 Payments for the last month
-p= number_to_currency(last_month)
-
-h3 Payments for the previous month
-p= number_to_currency(previous_month)
-
-h3 Average per day
-p= number_to_currency(average_per_day)
-
-h3 Average per day for the las month
-p= number_to_currency(average_per_day_last)
-
-h3 Sum for all time
-p= number_to_currency(all_time)
-
-h3 Average per day for all time
-p= number_to_currency(average_per_day_all)
+#stats-section
+  = render 'card_row', title_actual: 'Last month', value_actual: last_month, title_last: 'Previous month', value_last: previous_month
+  = render 'card_row', title_actual: 'Average per day', value_actual: average_per_day, title_last: 'For the last month', value_last: average_per_day_last
+  = render 'card_row', title_actual: 'Sum for all time', value_actual: all_time, title_last: 'Per day for all time', value_last: average_per_day_all

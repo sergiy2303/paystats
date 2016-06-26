@@ -1,0 +1,16 @@
+#stats-section {
+  .w3-col.m4 {
+    margin: 15px;
+    .amount {
+      font-size: 1.4em;
+    }
+    .w3-container {
+      height: 70px;
+    }
+    .w3-container.context {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
