@@ -64,12 +64,19 @@
   margin-top: 15px;
   #new-payment-form {
     margin-top: 15px;
-    input[type="number"], input[type="date"], select {
-      height: 40px;
+    input[type="number"], input[type="date"], select, textarea {
       box-shadow: 0 0 3px rgba(0,0,0,0.3);
-      max-width: 180px;
       font-family: "Comic Sans MS", cursive, sans-serif;
       background-color: #fff;
+    }
+
+    input[type="number"], input[type="date"], select {
+      max-width: 180px;
+      height: 40px;
+    }
+
+    textarea {
+      width: 100%;
     }
 
     input[type="file"] {

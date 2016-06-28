@@ -11,6 +11,7 @@
           th Amount
           th Date
           th Category
+          th Notes
           th Action
       tbody
         - payments.to_enum.with_index(1) do |payment, i|
@@ -19,6 +20,7 @@
             td= number_to_currency(payment.amount)
             td= payment.date
             td= payment&.category&.name&.capitalize
+            td= payment.notes
             td
               = link_to 'Edit', edit_payment_path(payment), remote: true, class: 'w3-btn w3-orange'
               = link_to 'Delete', payment_path(payment), method: :delete, remote: true, class: 'w3-btn'
