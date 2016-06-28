@@ -3,7 +3,7 @@ module PaymentsHelper
   def form_params
     params = { date: {}, category: {} }
     if action_name == 'new'
-      params[:date] = { value: last_payment.date || Date.today }
+      params[:date] = { value: last_payment&.date || Date.today }
       params[:category] = { selected: default_category.id }
     end
     params
