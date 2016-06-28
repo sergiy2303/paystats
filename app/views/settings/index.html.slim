@@ -7,10 +7,16 @@ h3 Here will be settings
         = select_tag :default_category_id, options_from_collection_for_select(current_user.all_categories, :id ,:name,current_user.default_category.id), class: 'w3-select'
         .submit-button
           = submit_tag :save, class: 'w3-btn w3-blue', data: { disable: true }
+
+  - flash.each do |key, message|
+    .w3-container.alert-section class="#{key == 'danger' ? 'w3-red' : 'w3-green'}"
+      span.w3-closebtn onclick="this.parentElement.style.display='none'"  &times;
+      p= message
+
   .w3-row
     .w3-col.m4
       = form_tag import_csv_settings_path, multipart: true do
         = label_tag 'Import from csv', nil ,class: 'w3-label w3-text-teal'
-        = file_field_tag :payments
+        = file_field_tag :payments, accept: '.csv'
         .submit-button
           = submit_tag :save, class: 'w3-btn w3-blue', data: { disable: true }

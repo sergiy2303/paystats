@@ -1,3 +1,5 @@
+require 'csv'
+
 class SettingsController < ApplicationController
   def index
   end
@@ -8,17 +10,23 @@ class SettingsController < ApplicationController
   end
 
   def import_csv
-    if params[:payments]
-      csv_text = params[:payments].read
-      csv = CSV.parse(csv_text, :headers => true)
-      csv.each do |item|
-        current_user.payments.create!(
-          date: Date.strptime(item['Date'], '%d/%m/%y'),
-          amount: item['Value'].to_f,
-          category: current_user.default_category
-        )
-      end
+    begin
+      if params[:payments].present?
+        csv_text = params[:payments].read
+        csv = CSV.parse(csv_text, :headers => true)
+        csv.each do |item|
+          current_user.payments.create!(
+            date: Date.strptime(item['Date'], '%d/%m/%y'),
+            amount: item['Value'].to_f,
+            category: current_user.default_category
+          )
+        end
+        flash[:success] = 'Your payments has been import success'
     end
-    redirect_to settings_path
+    rescue Exception => e
+      flash[:danger] = 'You entered file in invalid format'
+    ensure
+      redirect_to settings_path
+    end
   end
 end
