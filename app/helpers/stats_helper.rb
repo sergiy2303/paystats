@@ -20,7 +20,8 @@ module StatsHelper
   end
 
   def average_per_day_all
-    all_time / (payments.maximum('date') - payments.minimum('date'))
+    return 0 unless payments.present?
+    all_time / (payments.maximum('date') - payments.minimum('date') + 1)
   end
 
   def find_payments_for_month(start_date, end_date)

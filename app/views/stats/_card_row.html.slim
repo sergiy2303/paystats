@@ -11,6 +11,6 @@
         h3= title_actual
       .w3-container.context
         span.amount= number_to_currency(value_actual)
-        - percent = (value_actual / value_last) * 100 - 100
+        - percent = value_last.zero? ? 0 : (value_actual / value_last) * 100 - 100
         span class="#{percent > 0 ? 'w3-text-red' : 'w3-text-green'}"
           = number_to_percentage(percent, precision: 2)
