@@ -21,3 +21,17 @@ function closeForm() {
   $('span.w3-closebtn').closest('form').remove();
   $('.link-new a').show();
 }
+
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $('.image-preview').html('<img src=' + e.target.result + '>' + '</img>');
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+$("input#payment_image").change(function(){
+  readURL(this);
+});
