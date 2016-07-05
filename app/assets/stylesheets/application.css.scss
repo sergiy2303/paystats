@@ -95,6 +95,15 @@
       padding: 15px;
       margin: 10px 10px 20px 10px;
     }
+    .image-preview {
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      img {
+        max-width: 600px;
+        max-height: 400px;
+      }
+    }
   }
   .payments {
     margin-bottom: 15px;
