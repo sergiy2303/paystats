@@ -32,6 +32,6 @@ function readURL(input) {
   }
 }
 
-$("input#payment_image").change(function(){
+$(document).on('change', 'input#payment_image', function(){
   readURL(this);
 });
