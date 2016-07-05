@@ -1,7 +1,7 @@
 class PaymentsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :create
   expose(:payment, attributes: :payment_params)
-  expose(:payments) { current_user.payments.order(date: :desc).includes(:category).page(params[:page]).per(10) }
+  expose(:payments) { current_user.payments.order(date: :desc).includes(:category).page(params[:page]).per(50) }
 
   def index
   end

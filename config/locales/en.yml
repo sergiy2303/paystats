@@ -21,3 +21,8 @@
 
 en:
   hello: "Hello world"
+  number:
+    currency:
+       format:
+         unit: 'UAH'
+         format: '%n %u'

@@ -19,4 +19,7 @@ h3 Here will be settings
         = label_tag 'Import from csv', nil ,class: 'w3-label w3-text-teal'
         = file_field_tag :payments, accept: '.csv'
         .submit-button
-          = submit_tag :save, class: 'w3-btn w3-blue', data: { disable: true }
+          = submit_tag :import, class: 'w3-btn w3-blue', data: { disable: true }
+  .w3-row
+    .w3-col.m4
+      =link_to 'Export to CSV', export_csv_settings_path

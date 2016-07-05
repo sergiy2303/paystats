@@ -4,8 +4,11 @@ Rails.application.routes.draw do
   root 'payments#index'
   resources :stats, only: :index
   resources :settings, only: :index do
-    post 'set_default_category', to: 'settings#set_default_category', on: :collection
-    post 'import_csv', to: 'settings#import_csv', on: :collection
+    collection do
+      post :set_default_category
+      post :import_csv
+      get :export_csv
+    end
   end
   resources :categories
 end
