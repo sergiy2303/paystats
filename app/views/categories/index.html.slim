@@ -19,5 +19,5 @@
               td= category.name
               td
                 = link_to 'Edit', edit_category_path(category), class: 'w3-btn w3-orange', remote: true
-                = link_to 'Destroy', category_path(category), method: :delete, class: 'w3-btn w3-red', remote: true
+                = link_to 'Destroy', category_path(category), method: :delete, class: 'w3-btn w3-red', remote: true, data: { confirm: 'Are you sure?' }
 

@@ -23,7 +23,7 @@
             td= payment.notes
             td
               = link_to 'Edit', edit_payment_path(payment), remote: true, class: 'w3-btn w3-orange'
-              = link_to 'Delete', payment_path(payment), method: :delete, remote: true, class: 'w3-btn'
+              = link_to 'Delete', payment_path(payment), method: :delete, remote: true, class: 'w3-btn', data: { confirm: 'Are you sure?' }
               - if payment.image_url
                 = link_to 'Image', payment_path(payment), remote: true
 

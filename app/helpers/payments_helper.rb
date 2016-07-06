@@ -14,6 +14,6 @@ module PaymentsHelper
   end
 
   def last_payment
-    @date ||= current_user.payments.order(date: :desc).first
+    @last_payment ||= current_user.payments.order(created_at: :desc).first
   end
 end
