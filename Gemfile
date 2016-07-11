@@ -21,6 +21,7 @@ gem 'devise'
 gem 'slim'
 gem 'remotipart', '~> 1.2'
 gem 'where-or'
+gem "chartkick"
 
 group :development, :test do
   gem 'pry'

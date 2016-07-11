@@ -1,5 +1,17 @@
-h3 Hello!
-#stats-section
-  = render 'card_row', title_actual: 'Last month', value_actual: last_month, title_last: 'Previous month', value_last: previous_month
-  = render 'card_row', title_actual: 'Average per day', value_actual: average_per_day, title_last: 'For the last month', value_last: average_per_day_last
-  = render 'card_row', title_actual: 'Sum for all time', value_actual: all_time, title_last: 'Per day for all time', value_last: average_per_day_all
+
+ul.w3-navbar
+  li
+    a.tablink href="#" onclick="openTab('stats-section')"  Numbers
+  li
+    a.tablink href="#" onclick="openTab('graphs-section')"  Graphs
+
+#stats-section.w3-container.tab
+  = render 'card_row', title_actual: 'Current month', value_actual: current_month, title_last: 'Previous month', value_last: previous_month, no_percent: false
+  = render 'card_row', title_actual: 'Average per day', value_actual: average_per_day, title_last: 'For the last month', value_last: average_per_day_last, no_percent: false
+  = render 'card_row', title_actual: 'Sum for all time', value_actual: all_time, title_last: 'Per day for all time', value_last: average_per_day_all, no_percent: true
+
+#graphs-section.w3-container.tab
+  h2 = Date.today.strftime('%B')
+  = line_chart data_for_graph
+  h2 = 1.month.ago.strftime('%B')
+  = line_chart data_for_graph(Date.today.prev_month)

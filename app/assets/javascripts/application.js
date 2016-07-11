@@ -15,7 +15,8 @@
 //= require turbolinks
 //= require_tree .
 //= require jquery.remotipart
-
+//= require Chart.bundle
+//= require chartkick
 
 function closeForm() {
   $('span.w3-closebtn').closest('form').remove();
@@ -34,4 +35,17 @@ function readURL(input) {
 
 $(document).on('change', 'input#payment_image', function(){
   readURL(this);
+});
+
+function openTab(cityName) {
+  var i;
+  var x = document.getElementsByClassName("tab");
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  document.getElementById(cityName).style.display = "block";
+}
+
+$(document).on('page:change',function(){
+  openTab("stats-section");
 });
