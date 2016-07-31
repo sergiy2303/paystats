@@ -1,16 +1,26 @@
 #stats-section {
-  .w3-col.m4 {
-    margin: 15px;
-    .amount {
-      font-size: 1.4em;
+  #numbers-section {
+    .w3-col.m4 {
+      margin: 15px;
+      .amount {
+        font-size: 1.4em;
+      }
+      .w3-container {
+        height: 70px;
+      }
+      .w3-container.context {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
     }
-    .w3-container {
-      height: 70px;
-    }
-    .w3-container.context {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+  }
+  .tabs {
+    a.tablink {
+      width: 100%;
+      div {
+        width: 100%;
+      }
     }
   }
 }

@@ -37,15 +37,27 @@ $(document).on('change', 'input#payment_image', function(){
   readURL(this);
 });
 
-function openTab(cityName) {
-  var i;
-  var x = document.getElementsByClassName("tab");
-  for (i = 0; i < x.length; i++) {
-     x[i].style.display = "none";
-  }
-  document.getElementById(cityName).style.display = "block";
+$(document).on('click', '.tablink', function(e) {
+  e.preventDefault;
+  var name = this.dataset.target;
+  openTab(name);
+  $(this).find('div').addClass('w3-border-red');
+})
+
+function openTab(name) {
+  var i, tablinks, tabs;
+  tabs = $('.tab');
+  tabs.each(function(index) {
+    $(this).hide();
+  })
+  tablinks = $(".tablink div");
+  tablinks.each(function() {
+    $(this).removeClass('w3-border-red');
+  })
+  $('#' + name).show();
 }
 
 $(document).on('page:change',function(){
-  openTab("stats-section");
+  openTab("numbers-section");
+  $('.numbers div').addClass('w3-border-red');
 });
