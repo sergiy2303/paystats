@@ -29,7 +29,11 @@ module StatsHelper
   end
 
   def payments
-    @payments ||= current_user.payments
+    @payments ||= if selected_category_ids.present?
+      current_user.payments.where(category_id: selected_category_ids)
+    else
+      current_user.payments
+    end
   end
 
   def payments_for_month(date = Date.today)
@@ -56,5 +60,14 @@ module StatsHelper
 
   def end_day(date = Date.today)
     Date.new(date.year, date.month, -1)
+  end
+
+  def selected_category_ids
+    @category_ids ||= params[:category_ids].present? ? params[:category_ids] : []
+  end
+
+  def category_checked?(id)
+    return true unless selected_category_ids.present?
+    selected_category_ids.include?(id.to_s)
   end
 end

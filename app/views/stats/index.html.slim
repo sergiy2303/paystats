@@ -1,3 +1,7 @@
+- content_for :navigation
+  .categories
+    = render 'categories'
+
 #stats-section
   .w3-row.tabs
     a.tablink.numbers href="#" data-target="numbers-section"
@@ -5,13 +9,5 @@
     a.tablink.graphs href="#" data-target="graphs-section"
       .w3-third.w3-bottombar.w3-hover-blue.w3-padding Graphs
 
-  #numbers-section.w3-container.tab
-    = render 'card_row', title_actual: 'Current month', value_actual: current_month, title_last: 'Previous month', value_last: previous_month, no_percent: false
-    = render 'card_row', title_actual: 'Average per day', value_actual: average_per_day, title_last: 'For the last month', value_last: average_per_day_last, no_percent: false
-    = render 'card_row', title_actual: 'Sum for all time', value_actual: all_time, title_last: 'Per day for all time', value_last: average_per_day_all, no_percent: true
-
-  #graphs-section.w3-container.tab
-    h2 = Date.today.strftime('%B')
-    = line_chart data_for_graph
-    h2 = 1.month.ago.strftime('%B')
-    = line_chart data_for_graph(Date.today.prev_month)
+  .stats-content
+    =render 'content'
