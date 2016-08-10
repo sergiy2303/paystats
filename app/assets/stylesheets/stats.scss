@@ -26,3 +26,20 @@
 }
 
 .categories { margin-right: 80px; }
+
+.card-header {
+  display: flex;
+  justify-content: space-around;
+}
+
+.card-body .w3-row {
+  display: flex;
+  justify-content: space-around;
+  div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+  }
+}
+
