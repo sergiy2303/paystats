@@ -61,3 +61,7 @@ $(document).on('page:change',function(){
   openTab("numbers-section");
   $('.numbers div').addClass('w3-border-red');
 });
+
+$(document).on('change', "input[type='checkbox'][name='category_ids[]']", function() {
+  $(this).closest('form').submit();
+})

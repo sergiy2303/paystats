@@ -3,4 +3,3 @@
     p
       = check_box_tag "category_ids[#{c.id}]", c.id, category_checked?(c.id), name: "category_ids[]", id: "category_ids_#{c.id}", class: 'w3-check'
       = label_tag "category_ids_#{c.id}", c.name.capitalize, class: 'w3-validate'
-  = submit_tag :submit, class: 'w3-btn w3-green'
