@@ -64,6 +64,7 @@ GEM
     chartkick (2.0.0)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
+    choice (0.2.0)
     chromedriver-helper (1.0.0)
       archive-zip (~> 0.7.0)
       nokogiri (~> 1.6)
@@ -182,6 +183,11 @@ GEM
       activesupport (>= 4.2.0.beta, < 5.0)
       nokogiri (~> 1.6.0)
       rails-deprecated_sanitizer (>= 1.0.1)
+    rails-erd (1.5.0)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
     railties (4.2.4)
@@ -214,6 +220,7 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    ruby-graphviz (1.2.2)
     rubyzip (1.2.0)
     sass (3.4.22)
     sass-rails (5.0.4)
@@ -292,6 +299,7 @@ DEPENDENCIES
   pry
   pry-nav
   rails (= 4.2.4)
+  rails-erd
   remotipart (~> 1.2)
   rspec-rails (~> 3.0)
   sass-rails (~> 5.0)

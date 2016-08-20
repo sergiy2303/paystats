@@ -1,5 +1,5 @@
 = form_tag stats_path, method: :get, remote: true do
   - all_categories.each do |c|
     p
-      = check_box_tag "category_ids[#{c.id}]", c.id, category_checked?(c.id), name: "category_ids[]", id: "category_ids_#{c.id}", class: 'w3-check'
+      = check_box_tag "category_ids[#{c.id}]", c.id, false, name: "category_ids[]", id: "category_ids_#{c.id}", class: 'w3-check'
       = label_tag "category_ids_#{c.id}", c.name.capitalize, class: 'w3-validate'

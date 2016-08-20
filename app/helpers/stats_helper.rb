@@ -8,7 +8,7 @@ module StatsHelper
   end
 
   def average_per_day
-    current_month / (Date.today - Date.today.prev_month).to_i
+    current_month / Date.today.mday
   end
 
   def average_per_day_last
