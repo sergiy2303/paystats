@@ -14,3 +14,10 @@ test: &test
 
 cucumber:
   <<: *test
+
+production:
+  <<: *default
+  database: paystats_production
+  host: <%= ENV['DATABASE_HOST'] %>
+  username: <%= ENV['DATABASE_USER'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
