@@ -38,10 +38,8 @@ end
 
 group :test do
   gem 'rspec-rails', '~> 3.0'
-  gem "factory_girl_rails", "~> 4.0"
-  gem 'cucumber-rails', :require => false
+  gem 'factory_bot_rails', '~> 4.0'
   gem 'database_cleaner'
-  gem 'selenium-webdriver'
-  gem 'poltergeist'
-  gem 'chromedriver-helper'
+  gem 'faker'
+  gem 'rspec-json_expectations'
 end
