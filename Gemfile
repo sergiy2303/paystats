@@ -23,6 +23,7 @@ gem 'remotipart', '~> 1.2'
 gem 'where-or'
 gem "chartkick"
 gem 'bigdecimal', '1.3.5'
+gem 'httparty'
 
 group :development, :test do
   gem 'pry'
