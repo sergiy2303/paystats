@@ -4,17 +4,22 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - export CACHE_TAG=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - export ECR_REPOSITORY_URL=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - export CACHE_TAG=$ECR_REPOSITORY_URL/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - export CACHE_TESTS_TAG=$ECR_REPOSITORY_URL/$IMAGE_REPO_NAME:paystats-tests
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPOSITORY_URL
       - echo $CACHE_TAG
-      - docker pull $CACHE_TAG
-      - docker tag $CACHE_TAG "paystats_app:latest"
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - docker pull --quiet $CACHE_TAG
+      - docker pull --quiet $CACHE_TESTS_TAG
   build:
     commands:
-      - codebuild-breakpoint
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker-compose build app
       - docker-compose run app cloud/run_tests.sh
-
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker tag paystats_app:latest $CACHE_TESTS_TAG
+      - docker push --quiet $CACHE_TESTS_TAG

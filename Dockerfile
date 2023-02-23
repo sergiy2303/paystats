@@ -1,4 +1,4 @@
-FROM ruby:2.7.7-alpine3.16
+FROM public.ecr.aws/docker/library/ruby:2.7-alpine3.16
 
 RUN apk update
 

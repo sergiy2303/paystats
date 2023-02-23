@@ -3,6 +3,9 @@ services:
   app:
     build:
       context: .
+      cache_from:
+        - ${CACHE_TAG}
+        - ${CACHE_TESTS_TAG}
     depends_on:
       - db
     environment:
@@ -17,7 +20,7 @@ services:
       - 3000:3000
 
   db:
-    image: postgres:15.2
+    image: public.ecr.aws/docker/library/postgres:15.2-alpine3.17
     environment:
       POSTGRES_USER: ${DATABASE_USER:-postgres}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-password}
