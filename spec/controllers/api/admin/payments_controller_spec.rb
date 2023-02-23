@@ -27,7 +27,7 @@ RSpec.describe Api::Admin::PaymentsController, type: :controller do
       it 'returns 401' do
         get :index
 
-        expect(response.status).to eq(400)
+        expect(response.status).to eq(401)
       end
     end
   end
