@@ -7,7 +7,7 @@ default: &default
 
 development:
   <<: *default
-  database: paystats_dev
+  database: paystats_development
 
 test: &test
   <<: *default
@@ -19,3 +19,7 @@ cucumber:
 production:
   <<: *default
   database: paystats_production
+
+dev:
+  <<: *default
+  database: paystats_dev
