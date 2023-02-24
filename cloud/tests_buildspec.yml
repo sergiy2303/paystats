@@ -1,5 +1,7 @@
 version: 0.2
-
+env:
+  parameter-store:
+    AWS_ACCOUNT_ID: /codebuild/paystats/aws_account_id
 phases:
   pre_build:
     commands:
@@ -12,6 +14,7 @@ phases:
       - docker pull --quiet $CACHE_TAG
       - docker pull --quiet $CACHE_TESTS_TAG
   build:
+    on-failure: ABORT
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...

@@ -1,5 +1,7 @@
 version: 0.2
-
+env:
+  parameter-store:
+    AWS_ACCOUNT_ID: /codebuild/paystats/aws_account_id
 phases:
   pre_build:
     commands:
@@ -9,6 +11,7 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPOSITORY_URL
       - docker pull --quiet $ECR_TAG || true
   build:
+    on-failure: ABORT
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
