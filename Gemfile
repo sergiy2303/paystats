@@ -12,7 +12,6 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'pg', '~> 0.20.0'
 gem 'carrierwave'
-gem 'cloudinary'
 gem 'simple_form'
 gem 'decent_exposure', '~> 2.3.3'
 gem 'kaminari'
