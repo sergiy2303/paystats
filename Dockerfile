@@ -36,9 +36,9 @@ RUN gem install bundler -v 1.17.3
 RUN bundler --version
 
 ENV RAILS_ROOT /paystats
-ENV APP_ENV development
-ENV RACK_ENV development
-ENV RAILS_ENV development
+ENV APP_ENV dev
+ENV RACK_ENV dev
+ENV RAILS_ENV dev
 ARG SECRET_KEY_BASE_ARG
 ENV SECRET_KEY_BASE=$SECRET_KEY_BASE_ARG
 ENV AWS_REGION us-east-1

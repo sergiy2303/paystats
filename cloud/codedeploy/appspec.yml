@@ -1,0 +1,22 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www
+hooks:
+  BeforeInstall:
+    - location: install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: start_app.sh
+      timeout: 60
+      runas: root
+  ApplicationStop:
+    - location: stop_app.sh
+      timeout: 60
+      runas: root
+  ValidateService:
+    - location: validate_service.sh
+      timeout: 60
+      runas: root

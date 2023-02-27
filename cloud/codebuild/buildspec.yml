@@ -16,10 +16,16 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - echo $ECR_TAG
-      - docker build --cache-from $ECR_TAG -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker build --cache-from $ECR_TAG --build-arg SECRET_KEY_BASE_ARG=$SECRET_KEY_BASE -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $ECR_TAG
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $ECR_TAG
+
+artifacts:
+  files:
+    - './cloud/codedeploy/**/*'
+  name: paystats.zip
+  discard-paths: yes
