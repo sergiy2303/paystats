@@ -5,27 +5,33 @@ env:
 phases:
   pre_build:
     commands:
+      - env
       - echo Logging in to Amazon ECR...
       - export ECR_REPOSITORY_URL=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - export ECR_TAG=$ECR_REPOSITORY_URL/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - export CACHE_ECR_TAG=$ECR_REPOSITORY_URL/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - export TAG_VERSION="$CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - export ECR_TAG=$ECR_REPOSITORY_URL/$IMAGE_REPO_NAME:$TAG_VERSION
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPOSITORY_URL
-      - docker pull --quiet $ECR_TAG || true
+      - docker pull --quiet $CACHE_ECR_TAG || true
   build:
     on-failure: ABORT
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - echo $ECR_TAG
-      - docker build --cache-from $ECR_TAG --build-arg SECRET_KEY_BASE_ARG=$SECRET_KEY_BASE -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - echo $CACHE_ECR_TAG
+      - docker build --cache-from $CACHE_ECR_TAG --build-arg SECRET_KEY_BASE_ARG=$SECRET_KEY_BASE -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $CACHE_ECR_TAG
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $ECR_TAG
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $ECR_TAG
+      - docker push $CACHE_ECR_TAG
+      - sed -i "s+ECR_TAG=.*+ECR_TAG=$ECR_TAG+g" cloud/codedeploy/scripts/install.sh
 
 artifacts:
   files:
     - './cloud/codedeploy/**/*'
-  name: paystats.zip
+  name: $TAG_VERSION.zip
   discard-paths: yes
