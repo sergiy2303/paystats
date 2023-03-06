@@ -36,9 +36,10 @@ RUN gem install bundler -v 1.17.3
 RUN bundler --version
 
 ENV RAILS_ROOT /paystats
-ENV APP_ENV dev
-ENV RACK_ENV dev
-ENV RAILS_ENV dev
+ARG APP_ENV_ARG
+ENV APP_ENV ${APP_ENV_ARG:-test}
+ENV RACK_ENV ${APP_ENV_ARG:-test}
+ENV RAILS_ENV ${APP_ENV_ARG:-test}
 ARG SECRET_KEY_BASE_ARG
 ENV SECRET_KEY_BASE=$SECRET_KEY_BASE_ARG
 ENV AWS_REGION us-east-1
@@ -53,7 +54,6 @@ ADD . $RAILS_ROOT
 
 RUN bundle exec rake tmp:clear log:clear
 RUN bundle exec rake assets:precompile --quiet
-
 
 VOLUME /paystats/log
 
