@@ -1,0 +1,47 @@
+Parameters:
+  Environment:
+    Description: Global environment
+    Type: String
+Mappings:
+  EnvironmentMap:
+    dev:
+      VpcId: vpc-0b323e88760773b6c
+Resources:
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      VpcId: !FindInMap [EnvironmentMap, !Ref Environment, VpcId]
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Web server default SecurityGroup
+      VpcId: !FindInMap [EnvironmentMap, !Ref Environment, VpcId]
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+Outputs:
+  SSHSecurityGroup:
+    Description: SSH security group id
+    Value: !Ref SSHSecurityGroup
+    Export:
+      Name: !Join [ "-", [ ssh-sg, !Ref "Environment" ] ]
+  WebServerSecurityGroup:
+    Description: Web server security group id
+    Value: !Ref WebServerSecurityGroup
+    Export:
+      Name: !Join [ "-", [ webserver-sg, !Ref "Environment" ] ]

@@ -1,0 +1,32 @@
+Parameters:
+  Environment:
+    Description: Global environment
+    Type: String
+Mappings:
+  EnvironmentMap:
+    dev:
+      VpcId: vpc-0b323e88760773b6c
+      InstanceType: t2.micro
+      Ami: ami-006dcf34c09e50022
+      Key: dev-key
+      SubnetId: subnet-067c5d00d129bb643
+Resources:
+  PaystatsInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: us-east-1a
+      ImageId: !FindInMap [EnvironmentMap, !Ref Environment, Ami]
+      InstanceType: !FindInMap [EnvironmentMap, !Ref Environment, InstanceType]
+      KeyName: !FindInMap [EnvironmentMap, !Ref Environment, Key]
+      NetworkInterfaces:
+        -
+          AssociatePublicIpAddress: true
+          Description: Network interface for Instance
+          DeviceIndex: 0
+          SubnetId: !FindInMap [ EnvironmentMap, !Ref "Environment", SubnetId]
+          GroupSet:
+            - Fn::ImportValue: !Join [ "-", [ webserver-sg, !Ref "Environment" ] ]
+            - Fn::ImportValue: !Join [ "-", [ ssh-sg, !Ref "Environment" ] ]
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
