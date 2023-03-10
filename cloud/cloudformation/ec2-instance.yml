@@ -5,11 +5,11 @@ Parameters:
 Mappings:
   EnvironmentMap:
     dev:
-      VpcId: vpc-0b323e88760773b6c
       InstanceType: t2.micro
       Ami: ami-006dcf34c09e50022
       Key: dev-key
-      SubnetId: subnet-067c5d00d129bb643
+      SubnetId: subnet-0652a094ee7c46892
+      IamProfileName: EC2Role
 Resources:
   PaystatsInstance:
     Type: AWS::EC2::Instance
@@ -18,6 +18,7 @@ Resources:
       ImageId: !FindInMap [EnvironmentMap, !Ref Environment, Ami]
       InstanceType: !FindInMap [EnvironmentMap, !Ref Environment, InstanceType]
       KeyName: !FindInMap [EnvironmentMap, !Ref Environment, Key]
+      IamInstanceProfile: !FindInMap [EnvironmentMap, !Ref Environment, IamProfileName]
       NetworkInterfaces:
         -
           AssociatePublicIpAddress: true
@@ -30,3 +31,13 @@ Resources:
       Tags:
         - Key: Environment
           Value: !Ref Environment
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash -xe
+          yum update -y
+          yum install -y ruby wget jq docker
+          wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+          chmod +x ./install
+          ./install auto
+          systemctl enable docker
+          systemctl start docker
