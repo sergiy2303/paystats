@@ -31,6 +31,9 @@ Resources:
       Tags:
         - Key: Environment
           Value: !Ref Environment
+      Tags:
+        - Key: Name
+          Value: !Join [ "-", [ paystats, !Ref "Environment" ] ]
       UserData:
         Fn::Base64: |
           #!/bin/bash -xe

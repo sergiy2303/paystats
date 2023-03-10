@@ -1,0 +1,50 @@
+Parameters:
+  Environment:
+    Description: Global environment
+    Type: String
+Mappings:
+  EnvironmentMap:
+    dev:
+      InstanceType: db.t3.micro
+      Size: 20
+      StorageClass: gp2
+      Subnets: ['subnet-0906695e75632726d', 'subnet-05e6c4fe5bc398ca8', 'subnet-0bc23965ac6ebca31']
+Resources:
+  DBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBName: !Join ['_', [paystats, !Ref Environment]]
+      DBInstanceIdentifier: !Join ['-', [paystats, !Ref Environment]]
+      Engine: postgres
+      EngineVersion: 15.2
+      DBInstanceClass: !FindInMap [EnvironmentMap, !Ref Environment, InstanceType]
+      StorageType: !FindInMap [EnvironmentMap, !Ref Environment, StorageClass]
+      MasterUsername:
+        Fn::Sub:
+          - "{{resolve:ssm:/paystats/${Environment}/database_user}}"
+          - Environment: !Ref Environment
+      MasterUserPassword:
+        Fn::Sub:
+          - "{{resolve:ssm:/paystats/${Environment}/database_password}}"
+          - Environment: !Ref Environment
+      AllocatedStorage: !FindInMap [EnvironmentMap, !Ref Environment, Size]
+      DBSecurityGroups:
+        - !Ref DBSecurityGroup
+      DBSubnetGroupName: !Join [ "-", [ subnet-group, !Ref "Environment" ] ]
+
+  DBSecurityGroup:
+    Type: AWS::RDS::DBSecurityGroup
+    Properties:
+      EC2VpcId:
+        Fn::ImportValue: !Join [ "-", [ vpc, !Ref "Environment" ] ]
+      DBSecurityGroupIngress:
+        EC2SecurityGroupId:
+          Fn::ImportValue: !Join [ "-", [ webserver-sg, !Ref "Environment" ] ]
+      GroupDescription: Ec2 Access
+
+  SubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupName: !Join [ "-", [ subnet-group, !Ref "Environment" ] ]
+      DBSubnetGroupDescription: "Subnet Group for RDS"
+      SubnetIds: !FindInMap [EnvironmentMap, !Ref Environment, Subnets]
