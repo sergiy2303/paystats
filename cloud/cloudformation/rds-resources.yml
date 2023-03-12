@@ -43,8 +43,19 @@ Resources:
       GroupDescription: Ec2 Access
 
   SubnetGroup:
-    Type: "AWS::RDS::DBSubnetGroup"
+    Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupName: !Join [ "-", [ subnet-group, !Ref "Environment" ] ]
       DBSubnetGroupDescription: "Subnet Group for RDS"
       SubnetIds: !FindInMap [EnvironmentMap, !Ref Environment, Subnets]
+
+  DBUrlParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      DataType: text
+      Description: Database url
+      Name: !Sub
+        - /paystats/${Environment}/database_host
+        - Environment: !Ref Environment
+      Type: String
+      Value: !GetAtt DBInstance.Endpoint.Address
