@@ -2,6 +2,10 @@ version: 0.2
 env:
   parameter-store:
     AWS_ACCOUNT_ID: /codebuild/paystats/aws_account_id
+    SECRET_KEY_BASE: /paystats/dev/secret_key_base
+  variables:
+    IMAGE_TAG: latest
+    IMAGE_REPO_NAME: paystats
 phases:
   pre_build:
     commands:

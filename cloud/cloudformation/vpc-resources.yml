@@ -137,4 +137,76 @@ Outputs:
     Description: The VPC ID
     Value: !Ref VPC
     Export:
-      Name: !Join [ "-", [ vpc, !Ref "Environment" ] ]
+      Name: !Sub vpc-${Environment}
+  PrivateSubnetA:
+    Description: Private Subnet A
+    Value: !Ref PrivateSubnetA
+    Export:
+      Name: !Sub private-subnet-a-${Environment}
+  PrivateSubnetAArn:
+    Description: Private Subnet A arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PrivateSubnetA}
+      - PrivateSubnetA: !Ref PrivateSubnetA
+    Export:
+      Name: !Sub private-subnet-a-${Environment}-arn
+  PrivateSubnetB:
+    Description: Private Subnet B
+    Value: !Ref PrivateSubnetB
+    Export:
+      Name: !Sub private-subnet-b-${Environment}
+  PrivateSubnetBArn:
+    Description: Private Subnet B arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PrivateSubnetB}
+      - PrivateSubnetB: !Ref PrivateSubnetB
+    Export:
+      Name: !Sub private-subnet-b-${Environment}-arn
+  PrivateSubnetC:
+    Description: Private Subnet C
+    Value: !Ref PrivateSubnetC
+    Export:
+      Name: !Sub private-subnet-c-${Environment}
+  PrivateSubnetCArn:
+    Description: Private Subnet C arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PrivateSubnetC}
+      - PrivateSubnetC: !Ref PrivateSubnetC
+    Export:
+      Name: !Sub private-subnet-c-${Environment}-arn
+  PublicSubnetA:
+    Description: Public Subnet A
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: !Sub public-subnet-a-${Environment}
+  PublicSubnetAArn:
+    Description: Public Subnet A arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PublicSubnetA}
+      - PublicSubnetA: !Ref PublicSubnetA
+    Export:
+      Name: !Sub public-subnet-a-${Environment}-arn
+  PublicSubnetB:
+    Description: Public Subnet B
+    Value: !Ref PublicSubnetB
+    Export:
+      Name: !Sub public-subnet-b-${Environment}
+  PublicSubnetBArn:
+    Description: Public Subnet B arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PublicSubnetB}
+      - PublicSubnetB: !Ref PublicSubnetB
+    Export:
+      Name: !Sub public-subnet-b-${Environment}-arn
+  PublicSubnetC:
+    Description: Public Subnet C
+    Value: !Ref PublicSubnetC
+    Export:
+      Name: !Sub public-subnet-c-${Environment}
+  PublicSubnetCArn:
+    Description: Public Subnet C arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PublicSubnetC}
+      - PublicSubnetC: !Ref PublicSubnetC
+    Export:
+      Name: !Sub public-subnet-c-${Environment}-arn

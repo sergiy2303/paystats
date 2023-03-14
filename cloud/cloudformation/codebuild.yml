@@ -1,0 +1,200 @@
+Parameters:
+  AppName:
+    Description: Application AppName
+    Type: String
+  Environment:
+    Description: Global Environment
+    Type: String
+    Default: dev
+Mappings:
+  EnvironmentMap:
+    dev:
+      CodestarConnectionArn: arn:aws:codestar-connections:us-east-1:608525754125:connection/5891d88c-901e-4b6b-88cb-ce288206352d
+Resources:
+  BuildDockerImage:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Ref AppName
+      Description: Build docker image
+      ServiceRole: !Ref CodeBuildServiceRole
+      BadgeEnabled: true
+      Artifacts:
+        EncryptionDisabled: false
+        Location: paystats-artifacts
+        OverrideArtifactName: true
+        Packaging: ZIP
+        Path: codebuild-artifacts/
+        Type: S3
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:4.0
+        PrivilegedMode: true
+      Source:
+        Location: https://github.com/sergiy2303/paystats.git
+        Type: GITHUB
+        GitCloneDepth: 1
+        BuildSpec: cloud/codebuild/buildspec.yml
+      TimeoutInMinutes: 20
+      Triggers:
+        Webhook: true
+        FilterGroups:
+          - - Type: EVENT
+              Pattern: PUSH
+            - Type: HEAD_REF
+              Pattern: ^refs/tags/*
+      VpcConfig:
+        VpcId:
+          Fn::ImportValue: !Sub vpc-${Environment}
+        Subnets:
+          - Fn::ImportValue: !Sub public-subnet-a-${Environment}
+          - Fn::ImportValue: !Sub public-subnet-b-${Environment}
+          - Fn::ImportValue: !Sub public-subnet-c-${Environment}
+        SecurityGroupIds:
+          - !Ref SgCodeBuild
+      LogsConfig:
+        CloudWatchLogs:
+          Status: ENABLED
+          GroupName: !Sub ${AppName}-CloudWatchLogs-BuildLogGroup-Name
+
+  SgCodeBuild:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: SgCodeBuildPaystats
+      GroupDescription: CodeBuild sg
+      VpcId:
+        Fn::ImportValue: !Sub vpc-${Environment}
+      Tags:
+        - Key: Name
+          Value: SecurityGroupCodeBuild
+
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub ${AppName}-codebuild-base-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Resource:
+                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AppName}-CloudWatchLogs-BuildLogGroup-Name
+                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AppName}-CloudWatchLogs-BuildLogGroup-Name:*
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+              - Effect: Allow
+                Resource:
+                  - !Sub arn:aws:s3:::codepipeline-${AWS::Region}-*
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketAcl
+                  - s3:GetBucketLocation
+              - Effect: Allow
+                Resource:
+                  - !Sub arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/paystats-*
+                Action:
+                  - codebuild:CreateReportGroup
+                  - codebuild:CreateReport
+                  - codebuild:UpdateReport
+                  - codebuild:BatchPutTestCases
+                  - codebuild:BatchPutCodeCoverages
+        - PolicyName: !Sub ${AppName}-codebuild-vpc-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Resource:
+                  - "*"
+                Action:
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeDhcpOptions
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                  - ec2:DescribeSubnets
+                  - ec2:DescribeSecurityGroups
+                  - ec2:DescribeVpcs
+              - Effect: Allow
+                Resource:
+                  - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:network-interface/*
+                Action:
+                  - ec2:CreateNetworkInterfacePermission
+                Condition:
+                  StringEquals:
+                    ec2:Subnet:
+                      - Fn::ImportValue: !Sub public-subnet-a-${Environment}-arn
+                      - Fn::ImportValue: !Sub public-subnet-b-${Environment}-arn
+                      - Fn::ImportValue: !Sub public-subnet-c-${Environment}-arn
+                    ec2:AuthorizedService: codebuild.amazonaws.com
+        - PolicyName: !Sub ${AppName}-ssm-parameterstore-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Resource:
+                  - "*"
+                Action:
+                  - ssm:DescribeParameters
+                  - ssm:GetParameters
+        - PolicyName: !Sub ${AppName}-codebuild-custom-resources-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Resource:
+                  - "*"
+                Action:
+                  - ecr:GetRegistryPolicy
+                  - ecr:DescribeImageScanFindings
+                  - ecr:GetLifecyclePolicyPreview
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:DescribeRegistry
+                  - ecr:DescribePullThroughCacheRules
+                  - ecr:DescribeImageReplicationStatus
+                  - ecr:GetAuthorizationToken
+                  - ecr:ListTagsForResource
+                  - ecr:UploadLayerPart
+                  - ecr:ListImages
+                  - ecr:BatchGetRepositoryScanningConfiguration
+                  - ecr:GetRegistryScanningConfiguration
+                  - ecr:PutImage
+                  - ecr:BatchGetImage
+                  - ecr:CompleteLayerUpload
+                  - ecr:DescribeImages
+                  - ecr:DescribeRepositories
+                  - ecr:InitiateLayerUpload
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetRepositoryPolicy
+                  - ecr:GetLifecyclePolicy
+              - Effect: Allow
+                Resource:
+                  - arn:aws:s3:::paystats-artifacts/*
+                  - arn:aws:s3:::paystats-artifacts
+                Action:
+                  - s3:PutObject
+                  - s3:GetObjectAcl
+                  - s3:GetObject
+                  - s3:GetBucketTagging
+                  - s3:ListBucketVersions
+                  - s3:ListBucket
+                  - s3:GetBucketVersioning
+                  - s3:GetBucketAcl
+                  - s3:GetBucketLocation
+                  - s3:GetObjectVersion
+              - Effect: Allow
+                Resource:
+                  - !FindInMap [EnvironmentMap, !Ref Environment, CodestarConnectionArn]
+                Action:
+                  - codestar-connections:UseConnection
