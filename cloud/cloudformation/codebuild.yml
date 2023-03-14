@@ -43,30 +43,10 @@ Resources:
               Pattern: PUSH
             - Type: HEAD_REF
               Pattern: ^refs/tags/*
-      VpcConfig:
-        VpcId:
-          Fn::ImportValue: !Sub vpc-${Environment}
-        Subnets:
-          - Fn::ImportValue: !Sub public-subnet-a-${Environment}
-          - Fn::ImportValue: !Sub public-subnet-b-${Environment}
-          - Fn::ImportValue: !Sub public-subnet-c-${Environment}
-        SecurityGroupIds:
-          - !Ref SgCodeBuild
       LogsConfig:
         CloudWatchLogs:
           Status: ENABLED
           GroupName: !Sub ${AppName}-CloudWatchLogs-BuildLogGroup-Name
-
-  SgCodeBuild:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: SgCodeBuildPaystats
-      GroupDescription: CodeBuild sg
-      VpcId:
-        Fn::ImportValue: !Sub vpc-${Environment}
-      Tags:
-        - Key: Name
-          Value: SecurityGroupCodeBuild
 
   CodeBuildServiceRole:
     Type: AWS::IAM::Role
@@ -111,33 +91,6 @@ Resources:
                   - codebuild:UpdateReport
                   - codebuild:BatchPutTestCases
                   - codebuild:BatchPutCodeCoverages
-        - PolicyName: !Sub ${AppName}-codebuild-vpc-policy
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Resource:
-                  - "*"
-                Action:
-                  - ec2:CreateNetworkInterface
-                  - ec2:DescribeDhcpOptions
-                  - ec2:DescribeNetworkInterfaces
-                  - ec2:DeleteNetworkInterface
-                  - ec2:DescribeSubnets
-                  - ec2:DescribeSecurityGroups
-                  - ec2:DescribeVpcs
-              - Effect: Allow
-                Resource:
-                  - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:network-interface/*
-                Action:
-                  - ec2:CreateNetworkInterfacePermission
-                Condition:
-                  StringEquals:
-                    ec2:Subnet:
-                      - Fn::ImportValue: !Sub public-subnet-a-${Environment}-arn
-                      - Fn::ImportValue: !Sub public-subnet-b-${Environment}-arn
-                      - Fn::ImportValue: !Sub public-subnet-c-${Environment}-arn
-                    ec2:AuthorizedService: codebuild.amazonaws.com
         - PolicyName: !Sub ${AppName}-ssm-parameterstore-policy
           PolicyDocument:
             Version: 2012-10-17
