@@ -137,4 +137,40 @@ Outputs:
     Description: The VPC ID
     Value: !Ref VPC
     Export:
-      Name: !Join [ "-", [ vpc, !Ref "Environment" ] ]
+      Name: !Sub vpc-${Environment}
+  PrivateSubnetA:
+    Description: Private Subnet A
+    Value: !Ref PrivateSubnetA
+    Export:
+      Name: !Sub private-subnet-a-${Environment}
+  PrivateSubnetAArn:
+    Description: Private Subnet A arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PrivateSubnetA}
+      - PrivateSubnetA: !Ref PrivateSubnetA
+    Export:
+      Name: !Sub private-subnet-a-${Environment}-arn
+  PrivateSubnetB:
+    Description: Private Subnet B
+    Value: !Ref PrivateSubnetB
+    Export:
+      Name: !Sub private-subnet-b-${Environment}
+  PrivateSubnetBArn:
+    Description: Private Subnet B arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PrivateSubnetB}
+      - PrivateSubnetB: !Ref PrivateSubnetB
+    Export:
+      Name: !Sub private-subnet-b-${Environment}-arn
+  PrivateSubnetC:
+    Description: Private Subnet C
+    Value: !Ref PrivateSubnetC
+    Export:
+      Name: !Sub private-subnet-c-${Environment}
+  PrivateSubnetCArn:
+    Description: Private Subnet C arn
+    Value: !Sub
+      - arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${PrivateSubnetC}
+      - PrivateSubnetC: !Ref PrivateSubnetC
+    Export:
+      Name: !Sub private-subnet-c-${Environment}-arn
