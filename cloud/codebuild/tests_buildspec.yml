@@ -2,6 +2,9 @@ version: 0.2
 env:
   parameter-store:
     AWS_ACCOUNT_ID: /codebuild/paystats/aws_account_id
+  variables:
+    IMAGE_TAG: latest
+    IMAGE_REPO_NAME: paystats
 phases:
   pre_build:
     commands:

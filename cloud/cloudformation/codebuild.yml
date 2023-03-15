@@ -1,30 +1,50 @@
 Parameters:
-  AppName:
-    Description: Application AppName
+  ProjectName:
+    Description: ProjectName
     Type: String
   Environment:
     Description: Global Environment
     Type: String
     Default: dev
+  ExecutionType:
+    Description: Execution Type
+    Type: String
+    Default: build
 Mappings:
   EnvironmentMap:
     dev:
       CodestarConnectionArn: arn:aws:codestar-connections:us-east-1:608525754125:connection/5891d88c-901e-4b6b-88cb-ce288206352d
+  TypeMap:
+    tests:
+      BadgeEnabled: true
+      BuildSpec: cloud/codebuild/tests_buildspec.yml
+      TriggerPattern: ^refs/heads/*
+      ArtifactsType: NO_ARTIFACTS
+    build:
+      BadgeEnabled: false
+      BuildSpec: cloud/codebuild/buildspec.yml
+      TriggerPattern: ^refs/tags/*
+      ArtifactsType: S3
+Conditions:
+  IsTests: !Equals [!Ref ExecutionType, tests]
 Resources:
   BuildDockerImage:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Ref AppName
+      Name: !Ref ProjectName
       Description: Build docker image
       ServiceRole: !Ref CodeBuildServiceRole
-      BadgeEnabled: true
+      BadgeEnabled: !FindInMap [TypeMap, !Ref ExecutionType, BadgeEnabled]
       Artifacts:
-        EncryptionDisabled: false
-        Location: paystats-artifacts
-        OverrideArtifactName: true
-        Packaging: ZIP
-        Path: codebuild-artifacts/
-        Type: S3
+        Fn::If:
+          - IsTests
+          - Type: !FindInMap [TypeMap, !Ref ExecutionType, ArtifactsType]
+          - EncryptionDisabled: false
+            Location: paystats-artifacts
+            OverrideArtifactName: true
+            Packaging: ZIP
+            Path: codebuild-artifacts/
+            Type: !FindInMap [TypeMap, !Ref ExecutionType, ArtifactsType]
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -34,7 +54,7 @@ Resources:
         Location: https://github.com/sergiy2303/paystats.git
         Type: GITHUB
         GitCloneDepth: 1
-        BuildSpec: cloud/codebuild/buildspec.yml
+        BuildSpec: !FindInMap [TypeMap, !Ref ExecutionType, BuildSpec]
       TimeoutInMinutes: 20
       Triggers:
         Webhook: true
@@ -42,11 +62,11 @@ Resources:
           - - Type: EVENT
               Pattern: PUSH
             - Type: HEAD_REF
-              Pattern: ^refs/tags/*
+              Pattern: !FindInMap [TypeMap, !Ref ExecutionType, TriggerPattern]
       LogsConfig:
         CloudWatchLogs:
           Status: ENABLED
-          GroupName: !Sub ${AppName}-CloudWatchLogs-BuildLogGroup-Name
+          GroupName: !Sub ${ProjectName}-CloudWatchLogs-BuildLogGroup-Name
 
   CodeBuildServiceRole:
     Type: AWS::IAM::Role
@@ -61,14 +81,14 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-        - PolicyName: !Sub ${AppName}-codebuild-base-policy
+        - PolicyName: !Sub ${ProjectName}-codebuild-base-policy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
                 Resource:
-                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AppName}-CloudWatchLogs-BuildLogGroup-Name
-                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AppName}-CloudWatchLogs-BuildLogGroup-Name:*
+                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${ProjectName}-CloudWatchLogs-BuildLogGroup-Name
+                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${ProjectName}-CloudWatchLogs-BuildLogGroup-Name:*
                 Action:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
@@ -91,7 +111,7 @@ Resources:
                   - codebuild:UpdateReport
                   - codebuild:BatchPutTestCases
                   - codebuild:BatchPutCodeCoverages
-        - PolicyName: !Sub ${AppName}-ssm-parameterstore-policy
+        - PolicyName: !Sub ${ProjectName}-ssm-parameterstore-policy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -101,7 +121,7 @@ Resources:
                 Action:
                   - ssm:DescribeParameters
                   - ssm:GetParameters
-        - PolicyName: !Sub ${AppName}-codebuild-custom-resources-policy
+        - PolicyName: !Sub ${ProjectName}-codebuild-custom-resources-policy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
