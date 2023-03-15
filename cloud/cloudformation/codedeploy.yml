@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  ProjectName:
+    Description: ProjectName
+    Type: String
+  RevisionPath:
+    Description: Revision for deployment
+    Type: String
+Resources:
+  CodeDeployApplication:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: !Ref ProjectName
+      ComputePlatform: Server
+
+  DevDeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref ProjectName
+      Ec2TagFilters:
+        - Key: Name
+          Value: paystats-dev
+          Type: KEY_AND_VALUE
+      ServiceRoleArn: !GetAtt [CodeDeployServiceRole, Arn]
+      DeploymentGroupName: paystats-dev
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+      DeploymentStyle:
+        DeploymentType: IN_PLACE
+        DeploymentOption: WITHOUT_TRAFFIC_CONTROL
+      Deployment:
+        Description: Deployment
+        IgnoreApplicationStopFailures: true
+        Revision:
+          RevisionType: S3
+          S3Location:
+            Bucket: paystats-artifacts
+            Key: !Ref RevisionPath
+            BundleType: Zip
+
+  CodeDeployServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codedeploy.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess

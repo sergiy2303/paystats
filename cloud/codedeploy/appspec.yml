@@ -3,6 +3,8 @@ os: linux
 files:
   - source: /
     destination: /var/www
+    overwrite: true
+file_exists_behavior: OVERWRITE
 hooks:
   BeforeInstall:
     - location: install.sh
