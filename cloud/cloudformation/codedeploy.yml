@@ -52,3 +52,10 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
         - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+
+Outputs:
+  CodeDeployApplication:
+    Description: Code Deploy Application
+    Value: !Ref CodeDeployApplication
+    Export:
+      Name: !Join ['-', 'codedeploy', !Ref ProjectName]

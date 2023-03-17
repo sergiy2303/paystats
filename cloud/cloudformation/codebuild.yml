@@ -172,3 +172,9 @@ Resources:
                   - !FindInMap [EnvironmentMap, !Ref Environment, CodestarConnectionArn]
                 Action:
                   - codestar-connections:UseConnection
+Outputs:
+  BuildDockerImage:
+    Description: Build project
+    Value: !Ref BuildDockerImage
+    Export:
+      Name: !Join ['-', 'codebuild', !Ref ProjectName]

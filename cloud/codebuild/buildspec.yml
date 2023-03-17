@@ -23,6 +23,7 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - echo $CACHE_ECR_TAG
+      - echo $TAG_VERSION >> public/build_version.txt
       - docker build --cache-from $CACHE_ECR_TAG --build-arg SECRET_KEY_BASE_ARG=$SECRET_KEY_BASE --build-arg APP_ENV_ARG=dev -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $CACHE_ECR_TAG
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $ECR_TAG
