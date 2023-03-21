@@ -3,31 +3,38 @@ Parameters:
   Environment:
     Description: Global environment
     Type: String
+  ProjectName:
+    Description: ProjectName
+    Type: String
 Mappings:
   EnvironmentMap:
     dev:
       InstanceType: db.t3.micro
       Size: 20
       StorageClass: gp2
-      Subnets: ['subnet-0906695e75632726d', 'subnet-05e6c4fe5bc398ca8', 'subnet-0bc23965ac6ebca31']
 Resources:
   DBInstance:
     Type: AWS::RDS::DBInstance
+    DependsOn:
+      - SubnetGroup
+      - DBSecurityGroup
     Properties:
-      DBName: !Join ['_', [paystats, !Ref Environment]]
-      DBInstanceIdentifier: !Join ['-', [paystats, !Ref Environment]]
+      DBName: !Sub ${ProjectName}_${Environment}
+      DBInstanceIdentifier: !Sub ${ProjectName}-${Environment}
       Engine: postgres
       EngineVersion: 15.2
       DBInstanceClass: !FindInMap [EnvironmentMap, !Ref Environment, InstanceType]
       StorageType: !FindInMap [EnvironmentMap, !Ref Environment, StorageClass]
       MasterUsername:
         Fn::Sub:
-          - "{{resolve:ssm:/paystats/${Environment}/database_user}}"
+          - "{{resolve:ssm:/${ProjectName}/${Environment}/database_user}}"
           - Environment: !Ref Environment
+            ProjectName: !Ref ProjectName
       MasterUserPassword:
         Fn::Sub:
-          - "{{resolve:ssm:/paystats/${Environment}/database_password}}"
+          - "{{resolve:ssm-secure:/${ProjectName}/${Environment}/database_password}}"
           - Environment: !Ref Environment
+            ProjectName: !Ref ProjectName
       AllocatedStorage: !FindInMap [EnvironmentMap, !Ref Environment, Size]
       DBSecurityGroups:
         - !Ref DBSecurityGroup
@@ -48,15 +55,16 @@ Resources:
     Properties:
       DBSubnetGroupName: !Join [ "-", [ subnet-group, !Ref "Environment" ] ]
       DBSubnetGroupDescription: "Subnet Group for RDS"
-      SubnetIds: !FindInMap [EnvironmentMap, !Ref Environment, Subnets]
+      SubnetIds:
+        - Fn::ImportValue: !Sub private-subnet-a-${Environment}
+        - Fn::ImportValue: !Sub private-subnet-b-${Environment}
+        - Fn::ImportValue: !Sub private-subnet-c-${Environment}
 
   DBUrlParameter:
     Type: AWS::SSM::Parameter
     Properties:
       DataType: text
       Description: Database url
-      Name: !Sub
-        - /paystats/${Environment}/database_host
-        - Environment: !Ref Environment
+      Name: !Sub /${ProjectName}/${Environment}/database_host
       Type: String
       Value: !GetAtt DBInstance.Endpoint.Address
